@@ -1,4 +1,4 @@
-rv Version 3.2                        Wed Sep 25 22:42:47 2019
+rv Version 3.2                        Wed Sep 25 22:52:13 2019
 Scot W. Stevenson
 
 Header
@@ -35,22 +35,23 @@ Loc         Instruction in Binary                   Source Code
 0014  0001 0100 0000 0010 1000 0000 0000 0000 		sin t0
 
                                               		# We just examine the first character at this p
-                                              		# We use a0 because parts of this later will be
+                                              		# we figure out how to parse the whole string. 
+                                              		# use a0 because parts of this later will be
                                               		# handled by subroutine
 0018  1110 0110 0000 0001 1100 0101 0000 0011 		lbu a0, buffer		# get char from input
 001c  0000 0000 0000 0000 0000 0011 0001 0111 		la t1, cmd_tbl		# initalize pointer to the jump
 0020  0001 0001 0000 0011 0000 0011 0001 0011 		# addi (2nd inst in la seq)
 
                                               inner_loop:
-0024  0000 0000 0000 0011 0100 0010 1000 0011 		lbu t0, 0(t1)
+0024  0000 0000 0000 0011 0100 0010 1000 0011 		lbu t0, 0(t1)		# Get command character from tab
 0028  0000 0110 0000 0010 1000 0010 0110 0011 		beqz t0, error  	# End of the list of known com
 002c  0000 0000 1010 0010 1000 0110 0110 0011 		beq t0, a0, found	# No. Found a match?
-0030  0000 0000 1000 0011 0000 0011 0001 0011 		addi t1, t1, 8		# No. Next entry
+0030  0000 0000 1000 0011 0000 0011 0001 0011 		addi t1, t1, 8		# No. Next entry in command tab
 0034  1111 1111 0001 1111 1111 0000 0110 1111 		j inner_loop
 
                                               found:
 0038  0000 0000 0100 0011 0010 0011 1000 0011 		lw t2, 4(t1)		# jump address comes after char
-003c  0000 0000 0000 0011 1000 0000 0110 0111 		jr t2
+003c  0000 0000 0000 0011 1000 0000 0110 0111 		jr t2			# Execute the command routine
 0040  1111 1100 0001 1111 1111 0000 0110 1111 		j main_loop
 
                                               # --- Command routines ---
@@ -131,8 +132,7 @@ Loc         Instruction in Binary                   Source Code
 0124  0110 0101 0110 1110 0110 1001 0111 0100 
 0128  0000 0000 0000 0000 0000 0000 0000 1010 
 
-                                              cmd_tbl:	
-012c  0000 0000 0000 0000 0000 0000 0110 0001 		.word 'a', i_add
+012c  0000 0000 0000 0000 0000 0000 0110 0001 cmd_tbl:	.word 'a', i_add
 0130  0000 0000 0000 0000 0000 0000 0100 0100 
 0134  0000 0000 0000 0000 0000 0000 0110 0100 		.word 'd', i_delete
 0138  0000 0000 0000 0000 0000 0000 0101 0000 
@@ -147,6 +147,8 @@ Loc         Instruction in Binary                   Source Code
 0158  0000 0000 0000 0000 0000 0000 0000 0000 buffer:		.zero 1024
 0554  0000 0000 0000 0000 0000 0000 0000 0000 
 ======================================================= Output
+Enter a character: u
+?
 Enter a character: a
 Reached add subroutine
 Enter a character: q
@@ -154,7 +156,7 @@ Goodbye
 
 =========================================== Program statistics
 Input file name       = jumptable01.a
-Instructions executed = 57 (decimal)
+Instructions executed = 97 (decimal)
 Program size          = 558 (hex) 1368 (decimal)
 Load point            = 0 (hex) 0 (decimal)
 Programmer            = Scot W. Stevenson

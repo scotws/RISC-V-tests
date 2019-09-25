@@ -1,4 +1,4 @@
-rv Version 3.2                        Wed Sep 25 22:42:47 2019
+rv Version 3.2                        Wed Sep 25 22:52:13 2019
 Scot W. Stevenson
 
 Header
@@ -35,22 +35,23 @@ Loc     Code         Source Code
 0014  14028000 		sin t0
 
                		# We just examine the first character at this p
-               		# We use a0 because parts of this later will be
+               		# we figure out how to parse the whole string. 
+               		# use a0 because parts of this later will be
                		# handled by subroutine
 0018  e601c503 		lbu a0, buffer		# get char from input
 001c  00000317 		la t1, cmd_tbl		# initalize pointer to the jump
 0020  11030313 		# addi (2nd inst in la seq)
 
                inner_loop:
-0024  00034283 		lbu t0, 0(t1)
+0024  00034283 		lbu t0, 0(t1)		# Get command character from tab
 0028  06028263 		beqz t0, error  	# End of the list of known com
 002c  00a28663 		beq t0, a0, found	# No. Found a match?
-0030  00830313 		addi t1, t1, 8		# No. Next entry
+0030  00830313 		addi t1, t1, 8		# No. Next entry in command tab
 0034  ff1ff06f 		j inner_loop
 
                found:
 0038  00432383 		lw t2, 4(t1)		# jump address comes after char
-003c  00038067 		jr t2
+003c  00038067 		jr t2			# Execute the command routine
 0040  fc1ff06f 		j main_loop
 
                # --- Command routines ---
@@ -131,8 +132,7 @@ Loc     Code         Source Code
 0124  656e6974
 0128  0000000a
 
-               cmd_tbl:	
-012c  00000061 		.word 'a', i_add
+012c  00000061 cmd_tbl:	.word 'a', i_add
 0130  00000044
 0134  00000064 		.word 'd', i_delete
 0138  00000050
@@ -147,6 +147,8 @@ Loc     Code         Source Code
 0158  00000000 buffer:		.zero 1024
 0554  00000000
 ======================================================= Output
+Enter a character: u
+?
 Enter a character: a
 Reached add subroutine
 Enter a character: q
@@ -154,7 +156,7 @@ Goodbye
 
 =========================================== Program statistics
 Input file name       = jumptable01.a
-Instructions executed = 57 (decimal)
+Instructions executed = 97 (decimal)
 Program size          = 558 (hex) 1368 (decimal)
 Load point            = 0 (hex) 0 (decimal)
 Programmer            = Scot W. Stevenson

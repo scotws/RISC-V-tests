@@ -16,8 +16,9 @@ main_loop:
 		la t0, buffer
 		sin t0
 
-		# We just examine the first character at this point
-		# We use a0 because parts of this later will be
+		# We just examine the first character at this point, later
+		# we figure out how to parse the whole string. Here, we
+		# use a0 because parts of this later will be
 		# handled by subroutine
 		lbu a0, buffer		# get char from input
 		la t1, cmd_tbl		# initalize pointer to the jump table
@@ -77,8 +78,7 @@ s_quit:		.asciz "Goodbye\n"
 s_welcome:	.asciz "Enter a character: "
 s_write:	.asciz "Reached write subroutine\n"
 
-cmd_tbl:	
-		.word 'a', i_add
+cmd_tbl:	.word 'a', i_add
 		.word 'd', i_delete
 		.word 'i', i_insert
 		.word 'w', i_write
