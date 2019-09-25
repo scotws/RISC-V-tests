@@ -1,0 +1,88 @@
+# Command loop / jump table experiment 
+# Scot W. Stevenson <scot.stevenson@gmail.com>
+# First version: 25. Sep 2019
+# This version: 25. Sep 2019
+
+# Command loop that accepts a character and uses this to access a
+# jump table for a subrountine. This is an experiment for a 
+# possible ed clone.
+
+.text
+_start:
+main_loop:
+		# Print welcome string
+		la t0, s_welcome
+		sout t0
+		la t0, buffer
+		sin t0
+
+		# We just examine the first character at this point
+		# We use a0 because parts of this later will be
+		# handled by subroutine
+		lbu a0, buffer		# get char from input
+		la t1, cmd_tbl		# initalize pointer to the jump table
+
+inner_loop:
+		lbu t0, 0(t1)		# Get command character from table
+		beqz t0, error  	# End of the list of known commands?
+		beq t0, a0, found	# No. Found a match?
+		addi t1, t1, 8		# No. Next entry in command table
+		j inner_loop
+
+found:
+		lw t2, 4(t1)		# jump address comes after char
+		jr t2			# Execute the command routine
+		j main_loop
+
+# --- Command routines ---
+
+i_add:
+		la t0, s_add
+		j common_out
+i_delete:
+		la t0, s_delete
+		j common_out
+i_insert:
+		la t0, s_insert
+		j common_out
+i_write:
+		la t0, s_write
+		j common_out 
+
+i_quit:		
+		la t0, s_quit
+		sout t0
+		halt
+
+common_out:
+		sout t0
+		ret
+
+# --- Error handling ---
+
+error:
+		# We follow the ed convention of only having a '?' as an error
+		la t0, s_error
+		sout t0
+		j main_loop
+
+.data
+# --- Data ---
+
+s_add:		.asciz "Reached add subroutine\n"
+s_delete:	.asciz "Reached delete subroutine\n"
+s_error:	.asciz "?\n"
+s_insert:	.asciz "Reached insert subroutine\n"
+s_quit:		.asciz "Goodbye\n"
+s_welcome:	.asciz "Enter a character: "
+s_write:	.asciz "Reached write subroutine\n"
+
+cmd_tbl:	
+		.word 'a', i_add
+		.word 'd', i_delete
+		.word 'i', i_insert
+		.word 'w', i_write
+		.word 'q', i_quit
+		.word 0
+
+buffer:		.zero 1024

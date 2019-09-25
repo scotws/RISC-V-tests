@@ -1,0 +1,160 @@
+rv Version 3.2                        Wed Sep 25 22:42:47 2019
+Scot W. Stevenson
+
+Header
+R
+T 00000000
+S 00000000
+A 00000130
+A 00000138
+A 00000140
+A 00000148
+A 00000150
+D 000002f8
+C
+
+Loc     Code         Source Code
+               # Command loop / jump table experiment 
+               # Scot W. Stevenson <scot.stevenson@gmail.com>
+               # First version: 25. Sep 2019
+               # This version: 25. Sep 2019
+
+               # Command loop that accepts a character and uses 
+               # jump table for a subrountine. This is an experi
+               # possible ed clone.
+
+               .text
+               _start:
+               main_loop:
+               		# Print welcome string
+0000  00000297 		la t0, s_welcome
+0004  0fc28293 		# addi (2nd inst in la seq)
+0008  0c028000 		sout t0
+000c  00000297 		la t0, buffer
+0010  14c28293 		# addi (2nd inst in la seq)
+0014  14028000 		sin t0
+
+               		# We just examine the first character at this p
+               		# We use a0 because parts of this later will be
+               		# handled by subroutine
+0018  e601c503 		lbu a0, buffer		# get char from input
+001c  00000317 		la t1, cmd_tbl		# initalize pointer to the jump
+0020  11030313 		# addi (2nd inst in la seq)
+
+               inner_loop:
+0024  00034283 		lbu t0, 0(t1)
+0028  06028263 		beqz t0, error  	# End of the list of known com
+002c  00a28663 		beq t0, a0, found	# No. Found a match?
+0030  00830313 		addi t1, t1, 8		# No. Next entry
+0034  ff1ff06f 		j inner_loop
+
+               found:
+0038  00432383 		lw t2, 4(t1)		# jump address comes after char
+003c  00038067 		jr t2
+0040  fc1ff06f 		j main_loop
+
+               # --- Command routines ---
+
+               i_add:
+0044  00000297 		la t0, s_add
+0048  05828293 		# addi (2nd inst in la seq)
+004c  0380006f 		j common_out
+               i_delete:
+0050  00000297 		la t0, s_delete
+0054  06428293 		# addi (2nd inst in la seq)
+0058  02c0006f 		j common_out
+               i_insert:
+005c  00000297 		la t0, s_insert
+0060  07828293 		# addi (2nd inst in la seq)
+0064  0200006f 		j common_out
+               i_write:
+0068  00000297 		la t0, s_write
+006c  0a828293 		# addi (2nd inst in la seq)
+0070  0140006f 		j common_out 
+
+               i_quit:		
+0074  00000297 		la t0, s_quit
+0078  07c28293 		# addi (2nd inst in la seq)
+007c  0c028000 		sout t0
+0080  00000000 		halt
+
+               common_out:
+0084  0c028000 		sout t0
+0088  00008067 		ret
+
+               # --- Error handling ---
+
+               error:
+               		# We follow the ed convention of only having a 
+008c  00000297 		la t0, s_error
+0090  04428293 		# addi (2nd inst in la seq)
+0094  0c028000 		sout t0
+0098  f69ff06f 		j main_loop
+
+               .data
+               # --- Data ---
+
+009c  63616552 s_add:		.asciz "Reached add subroutine\n"
+00a0  20646568
+00a4  20646461
+00a8  72627573
+00ac  6974756f
+00b0  000a656e
+00b4  63616552 s_delete:	.asciz "Reached delete subroutine\n"
+00b8  20646568
+00bc  656c6564
+00c0  73206574
+00c4  6f726275
+00c8  6e697475
+00cc  00000a65
+00d0  00000a3f s_error:	.asciz "?\n"
+00d4  63616552 s_insert:	.asciz "Reached insert subroutine\n"
+00d8  20646568
+00dc  65736e69
+00e0  73207472
+00e4  6f726275
+00e8  6e697475
+00ec  00000a65
+00f0  646f6f47 s_quit:		.asciz "Goodbye\n"
+00f4  0a657962
+00f8  00000000
+00fc  65746e45 s_welcome:	.asciz "Enter a character: "
+0100  20612072
+0104  72616863
+0108  65746361
+010c  00203a72
+0110  63616552 s_write:	.asciz "Reached write subroutine\n"
+0114  20646568
+0118  74697277
+011c  75732065
+0120  756f7262
+0124  656e6974
+0128  0000000a
+
+               cmd_tbl:	
+012c  00000061 		.word 'a', i_add
+0130  00000044
+0134  00000064 		.word 'd', i_delete
+0138  00000050
+013c  00000069 		.word 'i', i_insert
+0140  0000005c
+0144  00000077 		.word 'w', i_write
+0148  00000068
+014c  00000071 		.word 'q', i_quit
+0150  00000074
+0154  00000000 		.word 0
+
+0158  00000000 buffer:		.zero 1024
+0554  00000000
+======================================================= Output
+Enter a character: a
+Reached add subroutine
+Enter a character: q
+Goodbye
+
+=========================================== Program statistics
+Input file name       = jumptable01.a
+Instructions executed = 57 (decimal)
+Program size          = 558 (hex) 1368 (decimal)
+Load point            = 0 (hex) 0 (decimal)
+Programmer            = Scot W. Stevenson
