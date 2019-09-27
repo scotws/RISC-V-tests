@@ -1,0 +1,36 @@
+
+# Stringcount experiment
+# Scot W. Stevenson <scot.stevenson@gmail.com>
+# First version: 26. Sep 2019
+# This version: 26. Sep 2019
+
+# Accept a string and return its length.
+
+.text
+_start:
+		# print string
+		la t0, prompt
+		sout t0
+
+		# We put the string address in a0 because later this will
+		# probably be passed as function. Also, we're not sure how 
+		# sin stores the string in memory
+		sin a0
+
+		mv t0, a0	# Pointer to text
+		li t1, 0	# Counter 
+loop:
+		lbu t2, 0(t0)
+		beqz t2, done
+
+		addi t1, t1, 1
+		addi t0, t0, 1
+		j loop
+
+done:
+		addi t1, t1, -1
+		dout t1
+		halt
+
+.data
+prompt:		.asciz "String please: "

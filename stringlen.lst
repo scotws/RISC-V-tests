@@ -1,0 +1,60 @@
+rv Version 3.2                        Thu Sep 26 21:54:11 2019
+Scot W. Stevenson
+
+Header
+R
+T 00000000
+S 00000000
+D 00000040
+C
+
+Loc     Code         Source Code
+
+               # Stringcount experiment
+               # Scot W. Stevenson <scot.stevenson@gmail.com>
+               # First version: 26. Sep 2019
+               # This version: 26. Sep 2019
+
+               # Accept a string and return its length.
+
+               .text
+               _start:
+               		# print string
+0000  00000297 		la t0, prompt
+0004  03828293 		# addi (2nd inst in la seq)
+0008  0c028000 		sout t0
+
+               		# We put the string address in a0 because later
+               		# probably be passed as function. Also, we're n
+               		# sin stores the string in memory
+000c  14050000 		sin a0
+
+0010  00050293 		mv t0, a0	# Pointer to text
+0014  00000313 		li t1, 0	# Counter 
+               loop:
+0018  0002c383 		lbu t2, 0(t0)
+001c  00038863 		beqz t2, done
+
+0020  00130313 		addi t1, t1, 1
+0024  00128293 		addi t0, t0, 1
+0028  ff1ff06f 		j loop
+
+               done:
+002c  fff30313 		addi t1, t1, -1
+0030  04030000 		dout t1
+0034  00000000 		halt
+
+               .data
+0038  69727453 prompt:		.asciz "String please: "
+003c  7020676e
+0040  7361656c
+0044  00203a65
+======================================================= Output
+String please: 
+0
+=========================================== Program statistics
+Input file name       = stringlen.a
+Instructions executed = 16 (decimal)
+Program size          = 48 (hex) 72 (decimal)
+Load point            = 0 (hex) 0 (decimal)
+Programmer            = Scot W. Stevenson
