@@ -10,7 +10,7 @@ Toolchain and the Spike simulator (though you can use other emulators as well).
 
 System calls are the fundamental interface between a program and the Linux
 kernel. You can access them from assembler programs to bypass other libraries.
-See `man 2 syscalls' or http://man7.org/linux/man-pages/man2/syscalls.2.html for
+See `man 2 syscalls` or http://man7.org/linux/man-pages/man2/syscalls.2.html for
 more information and a complete list of system calls.
 
 ## System calls in C
@@ -26,7 +26,8 @@ The three parameters passed are a file descriptor, a pointer to a character
 buffer (in other words, a string) and the number of characters in that string to
 be printed. The [file descriptor](https://en.wikipedia.org/wiki/File_descriptor)
 can be the Standard Output. Note the string is not zero-terminated. In other
-words, this is very much like the `(addr n)` structure of Forth strings. 
+words, this is very much like the `(addr n)` structure of Forth strings, though
+the C people would probably never admit that. 
 
 ## RISC-V calling conventions
 
