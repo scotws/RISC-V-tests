@@ -8,6 +8,9 @@ Included here are experiments in RISC-V assembler, either based on the book
 (these end in .a), or the full GNU GCC RISC-V toolset with the Spike emulator
 (these end in .s).
 
+There is also an [introduction](docs/riscv_howto_syscalls.md) to accessing Linux
+system calls via RISC-V assembler.
+
 Obviously you'd have to be competely nuts to use any of this for your own stuff,
 because this is part of me learning RISC-V and all very, very experimental. If
 you do, note these are provided as is, with no guaranty, and I take no
