@@ -10,7 +10,8 @@ with examples. Assumes the GNU GCC assembler is used for the Spike simulator
 with pk and RV64I. 
 
 Use these at your own risk, I take no resposibility. I am grateful for
-corrections, additions, and comments.
+corrections, additions, and comments. This document is copyright Creative
+Commons by Attribution (CC BY). 
 
 ## EXIT
 
