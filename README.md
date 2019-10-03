@@ -10,8 +10,11 @@ Included here are experiments in RISC-V assembler, either based on the book
 
 There is also some documentation: 
 
-- An [introduction](docs/riscv_howto_syscalls.md) to accessing Linux
-system calls via RISC-V assembler.
+- An [introduction](docs/riscv_howto_syscalls.md) to accessing Linux system
+  calls via RISC-V assembler.
+
+- A [very incomplete list](docs/riscv_linux_system_calls.md) of Linux system
+  calls and how they are accessed in RISC-V assembler, with examples. 
 
 - [Notes](docs/gnu_assembler_tips.md) on using the GNU GCC assembler for
   RISC-V.
