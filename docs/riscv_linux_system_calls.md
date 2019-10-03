@@ -12,14 +12,93 @@ with pk and RV64I.
 Use these at your own risk, I take no resposibility. I am grateful for
 corrections, additions, and comments.
 
+## EXIT
 
-## WRITE
-
-Write bytes from a buffer to a file descriptor (`man 2 write`).
+Terminate the process (`man 2 exit`). Use this to end the program.
 
 ### Registers
 
-- a0: File to write to, usually STDOUT, which is 1.
+- a0: Return value: 0 for all okay, other for error
+- a7: System Call code for `exit`: 94
+
+### Return value
+
+_none_ 
+
+### Example code
+
+```
+        .equ SYS_EXIT, 94
+
+        .section .text
+        .align 2
+
+        li a0, 0                # Return code, no error
+        li a7, SYS_EXIT         # System call code for write
+        ecall
+```
+
+
+### Notes
+
+_none_
+
+
+## READ
+
+Read characters into a buffer (`man 2 read`). Use this to get a string from the
+user.
+
+### Registers
+
+- a0: File descriptor, usually STDIN (keyboard), which is 0
+- a1: Address of buffer to store string
+- a2: Maximal string length to receive
+- a7: System Call code for `read`: 63
+
+### Return value
+
+- a0: Number of bytes read if all went well, otherwise -1
+
+### Example code
+
+```
+        .equ STDIN, 0
+        .equ SYS_READ, 63
+        .equ MAX_CHARS, 255
+
+        .section .bss
+        .align 2
+
+buffer:         .space  256
+
+        .section .text
+        .align 2
+
+        li a0, STDIN            # File descriptor, 0 for STDIN
+        la a1, buffer           # Address of buffer to store string
+        li a2, MAX_CHARS        # Maximum number of chars to store
+        li a7, SYS_READ         # System call code for read
+        ecall
+
+        # TODO: ERROR HANDLING if a0 = -1
+```
+
+
+### Notes
+
+_none_
+
+
+
+## WRITE
+
+Write bytes from a buffer to a file descriptor (`man 2 write`). Use this to
+print a string. 
+
+### Registers
+
+- a0: File to write to, usually STDOUT (screen), which is 1.
 - a1: Address of the character buffer
 - a2: Length of the string
 - a7: System Call code for `write`: 64
