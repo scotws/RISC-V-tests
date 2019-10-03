@@ -28,7 +28,7 @@
 # Test routine to walk through all entries of the table as an experiment. If this were
 # the actual routine, we'd terminate the table with a zero entry and test for that. 
 
-        .globl _start
+        .global _start
 _start:
 
                 # Print from U_BUFFY to U_ANYA
