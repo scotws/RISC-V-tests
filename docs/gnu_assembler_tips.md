@@ -5,7 +5,7 @@ This version: 03. October 2019
 
 This is a random list of things I learned using the GNU GCC assembler for RISC-V. 
 
-## Getting the length of a string for a System Call
+## Getting the length of a string for a Linux system call
 
 Linux system calls take the string in the "Forth" format: Address of first
 character and length of string. There is no terminating zero. The actual string
@@ -34,7 +34,7 @@ This way, if we edit the string, we don't have to recalculate everything.
 
 ## Best practices as defined by me
 
-... since nobody else seems willing to to it: 
+... since I can't seem to find a list of them anywhere:
 
 - Use `.global` instead of `.globl`. This is just another weird ancient design
   decision like `umount` instead of `unmount` that needs to die.
