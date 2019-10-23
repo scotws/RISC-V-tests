@@ -1,10 +1,11 @@
 # How to use Linux System Calls with RISC-V
 Scot W. Stevenson <scot.stevenson@gmail.com>   
 First version: 29. Sep 2019   
-This version: 21. Oct 2019   
+This version: 23. Oct 2019   
 
 This text assumes you have set up a basic RISC-V system with the RISC-V GNU GCC
-Toolchain and the Spike simulator (though you can use other emulators as well).
+Toolchain and the Spike simulator or a full-scale RISC-V Linux emulation with
+QEMU.
 
 ## Background 
 
@@ -60,9 +61,17 @@ GNU GCC compiler suite and the Spike simulator, this is one possible solution:
         .equ WRITE, 64
         .equ EXIT, 93
 
+        .section .rodata
+        .align 2
+msg:
+        .ascii "RISC-V\n"
+
+        .section .text
+        .align 2
+
         .globl  _start
 _start:
-        
+
         li a0, STDOUT  # file descriptor
         la a1, msg     # address of string
         li a2, 7       # length of string
@@ -74,16 +83,21 @@ _start:
         li a0, 0       # 0 signals success
         li a7, EXIT
         ecall
-
-msg:
-        .ascii "RISC-V\n"
 ```        
 
-We assemble, link and run this program with 
+We assemble, link and run this program for Spike with 
 
 ```        
 riscv64-unknown-elf-gcc riscv_out.s -o riscv_out -nostartfiles -nostdlib
 spike pk riscv_out
+```        
+
+If you are using QEMU and a full Linux distribution such as Fedora, this would
+be:
+
+```        
+gcc riscv_out.s -o riscv_out -nostartfiles -nostdlib
+./riscv_out
 ```        
 
 > This example assumes RV64 - if you want to run the 32-bit version, you'll
@@ -107,6 +121,6 @@ riscv-unknown-elf-gcc out of the box.
 
 ## Sources 
 
-This text is based on a [Reddit
+This text was originally based on a [Reddit
 discussion](https://www.reddit.com/r/RISCV/comments/dagvzr/where_do_i_find_the_list_of_stdio_system_etc/).
 Thanks to everybody there for the help, especially Bruce Hoult.
