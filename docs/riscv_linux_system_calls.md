@@ -1,7 +1,7 @@
 # Linux System Calls for RISC-V with GNU GCC/Spike/pk
 Scot W. Stevenson <scot.stevenson@gmail.com>   
 First version: 03. October 2019   
-This version: 21. October 2019   
+This version: 23. October 2019   
 
 There is an [easy procedure](./riscv_howto_syscalls.md) for accesing Linux
 system calls from RISC-V as defined by `man 2 <CALL>`. To make things even
@@ -64,38 +64,24 @@ memory. Note that each call reserves at least one page of memory.
 
 ### Return value
 
-- a0: 0 on success, -1 on failure
+- a0: address of memory on success, -1 on failure
 
-### Example code
+### Example code 
 
 ```
-        .equ SYS_MMAP, 222
-        .equ SYS_WRITE, 64
-
-        .equ PAGESIZE, 4096
-
-        .equ PROT_READ, 0x1
-        .equ PROT_WRITE, 0x2
+        .equ SYS_MMAP, 222 
+        .equ PAGESIZE, 4096             # We reserve exactly one page
+        .equ PROT_READ, 0x1 
+        .equ PROT_WRITE, 0x2 
         .equ MAP_ANONYMOUS, 0x20
         .equ MAP_PRIVATE, 0x02
-
-        .equ STDOUT, 1
-
-        .section .rodata
-        .align 2
-
-success:        .ascii  "Mapping successful\n"
-l_success:      .byte   .-success
-
-failure:        .ascii  "Could not map\n"
-l_failure:      .byte   .-success
 
         .section .text
         .align 2
         .global _start
 
 _start:
-        # Print prompt
+        # Set up mmap call
         li a0, 0                        # NULL, because we want anonymous mapping
         li a1, PAGESIZE                 # Linux standard page is 4096
         li a2, PROT_READ|PROT_WRITE     # Read and write to page
@@ -103,30 +89,12 @@ _start:
         li a4, -1                       # File descriptor for anonymous
         li a5, 0                        # Offset
         li a7, SYS_MMAP
-        ecall 
-
-        # Print success or failure
-        beqz a0, itworked
-
-        # Failure
-        la a1, failure
-        la a2, l_failure
-        j print
-
-itworked:
-        # Success
-        la a1, success
-        lbu a2, l_success
-
-print:
-        li a0, STDOUT           # String goes to stdout (screen)
-        li a7, SYS_WRITE
-        ecall 
+        ecall
 ```
 
 ### Notes
 
-- Use `munmap` to free memory again, see below
+- Use `munmap` to free memory again, see there
 - `mmap` is the recommended way to reserve memory in modern systems instead of
   `brk` and `sbrk`. 
 - To get the values for parameters such as `MAP_ANONYMOUS`, run
@@ -135,6 +103,43 @@ print:
   https://stackoverflow.com/questions/38602525/looking-for-mmap-flag-values for
   a discussion). Also, see https://github.com/riscv/riscv-pk/blob/master/pk/mmap.h
 
+// -------------------------------------------------------------------
+## MUNMAP
+
+Unmap memory previously mapped with `mmap` (`man 2 munmap`). 
+
+### Registers
+
+- a0: Address previously supplied by `mmap` 
+- a1: Number of bytes to unmap
+
+### Return value
+
+- a0: 0 on success, -1 on failure
+
+### Example code 
+
+Assumes previous `mmap` call left address in a0.
+
+```
+        .equ SYS_MUNMAP, 215
+        .equ PAGESIZE, 4096     
+
+        .section .text
+        .align 2
+        .global _start
+
+_start:
+        # Assumes address is in a0 already
+        li a1, PAGESIZE
+        li a7, SYS_MUNMAP
+        ecall
+
+```
+
+### Notes
+
+_none_ 
 
 // -------------------------------------------------------------------
 ## READ
