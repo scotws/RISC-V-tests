@@ -1,10 +1,11 @@
-# How to start RISC-V Fedora 
+# How to start with RISC-V on Fedora with QEMU
 Scot W. Stevenson <scot.stevenson@gmail.com>   
-First version: 23. October 2019
-This version: 23. October 2019    
+First version: 23. October 2019   
+This version: 23. October 2019       
 
-The easiest way to get started with a complete RISC-V Linux system is through
-the QEMU emulator and Fedora pre-built images. Simply follow the instructions at
+The easiest way to get started with a complete RISC-V Linux system currently is
+through the QEMU emulator and Fedora pre-built images. Simply follow the
+instructions at
 https://wiki.qemu.org/Documentation/Platforms/RISCV#Booting_64-bit_Fedora : 
 
 First, go to https://fedorapeople.org/groups/risc-v/disk-images/ and download
@@ -36,12 +37,14 @@ content:
 
 Run the shell script. The terminal window you are using will show the console.
 Login with "root" as the user name and "riscv" as the password. You'll want to
-change that first thing with `passwd`. Create a normal user, for instance:
+change that first thing with `passwd`. Then create normal user, for instance:
 
 ```
         useradd --home /home/scot scot
         passwd scot
 ```
+
+Add a password. 
 
 The Fedora version currently available on the server is seriously old. Upgrade
 it following https://docs.fedoraproject.org/en-US/quick-docs/dnf-system-upgrade/
@@ -60,7 +63,7 @@ Fedora comes with a horribly hamstrung version of vim, which will not do at all:
         dnf install vim-enhanced
 ```
 
-Then you can logout. As described in
+Then you can logout as root. As described in
 https://fedorapeople.org/groups/risc-v/disk-images/readme.txt , you can ssh into
 the QEMU instance of Fedora at port 10000 from the hostmachine:
 
@@ -68,5 +71,6 @@ the QEMU instance of Fedora at port 10000 from the hostmachine:
         ssh -p 10000 scot@localhost
 ```
 
-The console is limited and will not let you resize the window.
+You will want to work this way, because the console is limited and will not let
+you resize the window.
 
