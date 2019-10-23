@@ -13,7 +13,7 @@ Use these at your own risk, I take no resposibility. I am grateful for
 corrections, additions, and comments. This document is copyright Creative
 Commons by Attribution (CC BY). 
 
-// -------------------------------------------------------------------
+----
 ## EXIT
 
 Terminate the process (`man 2 exit`). Use this to end the program.
@@ -46,7 +46,7 @@ _none_
 _none_
 
 
-// -------------------------------------------------------------------
+----
 ## MMAP
 
 Map files or directories into memory (`man 2 mmap`). Used here for anonymous
@@ -103,7 +103,7 @@ _start:
   https://stackoverflow.com/questions/38602525/looking-for-mmap-flag-values for
   a discussion). Also, see https://github.com/riscv/riscv-pk/blob/master/pk/mmap.h
 
-// -------------------------------------------------------------------
+---- 
 ## MUNMAP
 
 Unmap memory previously mapped with `mmap` (`man 2 munmap`). 
@@ -141,7 +141,7 @@ _start:
 
 _none_ 
 
-// -------------------------------------------------------------------
+----
 ## READ
 
 Read characters into a buffer (`man 2 read`). Use this to get a string from the
@@ -188,7 +188,7 @@ buffer:         .space  256
 _none_
 
 
-// -------------------------------------------------------------------
+----
 ## WRITE
 
 Write bytes from a buffer to a file descriptor (`man 2 write`). Use this to
@@ -235,4 +235,3 @@ l_msg:  .byte   .-msg
 - Strings defined this way are not zero terminated; use `.ascii` instead of
   `.asciz` or `.string`.
 
-// -------------------------------------------------------------------
