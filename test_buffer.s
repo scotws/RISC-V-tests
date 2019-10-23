@@ -13,7 +13,7 @@
 # - Execute with spike pk test_stringmatrix02
 
 # Fedora RISC-V in QEMU: 
-# - Assemble with gcc test_buffer -o test_buffer \
+# - Assemble with gcc test_buffer.s -o test_buffer \
 #       -nostartfiles -nostdlib \
 # - Execute resulting binary file normally
 

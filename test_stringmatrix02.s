@@ -7,13 +7,13 @@
 # number, storing the string data somewhere. Requires RV64IC arch 
 
 # Spike emulator: 
-# - Assemble with riscv64-unknown-elf-gcc test_buffer.s \
-#       -o test_buffer \
+# - Assemble with riscv64-unknown-elf-gcc test_stringmatrix02.s \
+#       -o test_stringmatrix02 \
 #       -nostartfiles -nostdlib \
 # - Execute with spike pk test_stringmatrix02
 
 # Fedora RISC-V in QEMU: 
-# - Assemble with gcc test_buffer -o test_buffer \
+# - Assemble with gcc test_stringmatrix02.s -o test_stringmatrix02 \
 #       -nostartfiles -nostdlib \
 # - Execute resulting binary file normally
 
