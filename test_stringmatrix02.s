@@ -1,14 +1,21 @@
 # Test for String Matrix storage, second version
 # Scot W. Stevenson <scot.stevenson@gmail.com>
 # First version: 29. Sep 2019
-# This version: 30. Sep 2019
+# This version: 23. Oct 2019
 
-# Requires RV64IC arch 
-# Call with riscv64-unknown-elf-gcc test_stringmatrix02.s -o test_stringmatrix02 -nostartfiles -nostdlib -march=rv64ic
-# Execute with spike pk test_stringmatrix02
+# Figure out a way to print strings with a call to a function with a single.
+# number, storing the string data somewhere. Requires RV64IC arch 
 
-# Figure out a way to print strings with a call to a function with a single
-# number, storing the string data somewhere
+# Spike emulator: 
+# - Assemble with riscv64-unknown-elf-gcc test_buffer.s \
+#       -o test_buffer \
+#       -nostartfiles -nostdlib \
+# - Execute with spike pk test_stringmatrix02
+
+# Fedora RISC-V in QEMU: 
+# - Assemble with gcc test_buffer -o test_buffer \
+#       -nostartfiles -nostdlib \
+# - Execute resulting binary file normally
 
         .option nopic
         .align 2
