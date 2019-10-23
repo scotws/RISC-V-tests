@@ -1,14 +1,21 @@
 # Buffer Test in RISC-V assembler GNU/Spike
 # Scot W. Stevenson <scot.stevenson@gmail.com>  
 # First version: 03. Oct 2019
-# This version: 03. Oct 2019
-
-# Requires RV64I arch
-# Call with riscv64-unknown-elf-gcc test_stringmatrix02.s -o test_stringmatrix02 -nostartfiles -nost>
-# Execute with spike pk test_stringmatrix02
+# This version: 23. Oct 2019
 
 # Using only Linux system calls, prompt user for string and place it in
-# a buffer. Print string from buffer
+# a buffer. Print string from buffer. Requires RV64I arch
+
+# Spike emulator: 
+# - Assemble with riscv64-unknown-elf-gcc test_buffer.s \
+#       -o test_buffer \
+#       -nostartfiles -nostdlib \
+# - Execute with spike pk test_stringmatrix02
+
+# Fedora RISC-V in QEMU: 
+# - Assemble with gcc test_buffer -o test_buffer \
+#       -nostartfiles -nostdlib \
+# - Execute resulting binary file normally
 
         .option nopic
 
@@ -59,7 +66,7 @@ _start:
         # Get string from user
         li a0, STDIN            # Get input from stdin (keyboard)
         la a1, buffer           # Put in buffer
-        la a2, MAX_STRING       # maximal string size
+        li a2, MAX_STRING       # maximal string size
         li a7, SYS_READ
         ecall
 
