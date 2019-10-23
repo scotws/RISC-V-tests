@@ -1,7 +1,7 @@
 # How to use Linux System Calls with RISC-V
 Scot W. Stevenson <scot.stevenson@gmail.com>   
 First version: 29. Sep 2019   
-This version: 02. Oct 2019   
+This version: 21. Oct 2019   
 
 This text assumes you have set up a basic RISC-V system with the RISC-V GNU GCC
 Toolchain and the Spike simulator (though you can use other emulators as well).
@@ -90,6 +90,20 @@ spike pk riscv_out
 > have to have a 32-bit version of pk, even if you pass the `--isa=RV32I`
 > argument to Spike. See https://github.com/riscv/riscv-gnu-toolchain/issues/162
 > for a discussion of this problem.
+
+## Getting the Parameters
+
+In some cases, such as `mmap`, the call expects various parameters like
+`PROT_READ` or `MAP_ANONYMOUS`. To get the relevant values, use a command such
+as
+
+```
+echo '#include <sys/mman.h>' | gcc -E - -dM | less
+```
+
+for the values. Note this currently does not seem to work with
+riscv-unknown-elf-gcc out of the box.
+
 
 ## Sources 
 
